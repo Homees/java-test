@@ -1,15 +1,16 @@
 package com.etnetera.hr.controller;
 
-import java.util.Optional;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.etnetera.hr.data.JavaScriptFramework;
-import com.etnetera.hr.repository.JavaScriptFrameworkRepository;
+import com.etnetera.hr.service.JavaScriptFrameworkService;
 
 /**
  * Simple REST controller for accessing application logic.
@@ -19,38 +20,56 @@ import com.etnetera.hr.repository.JavaScriptFrameworkRepository;
  */
 @RestController
 public class JavaScriptFrameworkController {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(JavaScriptFrameworkController.class);
+	
 	@Autowired
-	private JavaScriptFrameworkRepository repository;
-
-//	@Autowired
-//	public JavaScriptFrameworkController(JavaScriptFrameworkRepository repository) {
-//		this.repository = repository;
-//	}
+	private JavaScriptFrameworkService service;
 
 	@GetMapping("/frameworks")
-	public Iterable<JavaScriptFramework> frameworks() {
-		return repository.findAll();
+	public Iterable<JavaScriptFramework> getFrameworks() {
+		try {
+			Iterable<JavaScriptFramework> response = service.getFrameworks();
+			return response;
+		} catch (Exception e) {
+			logger.error("Could not find any frameworks.");
+			throw new RuntimeException("Could not find any frameworks.");
+		}
+		
+	}
+	
+	@GetMapping("/frameworks/get")
+	public JavaScriptFramework getFrameworkById(@RequestParam("id") Long id) {
+		try {
+			JavaScriptFramework response = service.getFrameworkById(id);
+			return response;
+		} catch (Exception e) {
+			logger.error("Could not find searched framework.");
+			throw new RuntimeException("Could not find searched framework.");
+		}
+		
 	}
 
 	@PostMapping("/frameworks/save")
 	public JavaScriptFramework saveFramework(JavaScriptFramework framework) {
-		return repository.save(framework);
-	}
-
-	@PostMapping("/frameworks/edit")
-	public JavaScriptFramework editFramework(JavaScriptFramework framework) {
-		Optional<JavaScriptFramework> response = repository.findById(framework.getId());
-
-		if (!response.isEmpty()) {
-			return repository.save(framework);
-		} else {
-			return null;
+		try {
+			JavaScriptFramework response = service.saveFramework(framework);
+			return response;
+		} catch (Exception e) {
+			logger.error("Could not save given framework.");
+			throw new RuntimeException("Could not save given framework.");
 		}
 	}
 
+
 	@DeleteMapping("/frameworks/delete")
-	public void deleteFrameworkById(Long id) {
-		repository.deleteById(id);
+	public Long deleteFrameworkById(Long id) {
+		try {
+			Long response = service.deleteFrameworkById(id);
+			return response;
+		} catch (Exception e) {
+			logger.error("Could not delete given framework.");
+			throw new RuntimeException("Could not delete given framework.");
+		}
 	}
 }

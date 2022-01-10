@@ -2,19 +2,19 @@ package com.etnetera.hr.data;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 
 /**
  * Simple data entity describing basic properties of every JavaScript framework.
@@ -35,8 +35,8 @@ public class JavaScriptFramework implements Serializable {
 	@Column(nullable = false, length = 30)
 	private String name;
 
-	//@OneToMany(mappedBy = "framework", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
-	private String version;
+	@ElementCollection(fetch = FetchType.EAGER)
+	private Set<String> version = new HashSet<>();
 
 	@Column(nullable = false, columnDefinition = "DATE")
 	private LocalDate deprecationDate;
@@ -49,7 +49,15 @@ public class JavaScriptFramework implements Serializable {
 
 	public JavaScriptFramework(String name, String version, LocalDate deprecationDate, HypeLevel hypeLevel) {
 		this.name = name;
-		this.version = version;
+		this.version.add(version);
+		this.deprecationDate = deprecationDate;
+		this.hypeLevel = hypeLevel;
+	}
+
+	public JavaScriptFramework(Long id, String name, String version, LocalDate deprecationDate, HypeLevel hypeLevel) {
+		this.id = id;
+		this.name = name;
+		this.version.add(version);
 		this.deprecationDate = deprecationDate;
 		this.hypeLevel = hypeLevel;
 	}
@@ -70,11 +78,11 @@ public class JavaScriptFramework implements Serializable {
 		this.name = name;
 	}
 
-	public String getVersion() {
+	public Set<String> getVersion() {
 		return version;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(Set<String> version) {
 		this.version = version;
 	}
 
@@ -96,7 +104,8 @@ public class JavaScriptFramework implements Serializable {
 
 	@Override
 	public String toString() {
-		return "JavaScriptFramework [id=" + id + ", name=" + name + "]";
+		return "JavaScriptFramework [id=" + id + ", name=" + name + ", versions=" + version.toString()
+				+ ", deprecationDate=" + deprecationDate + ", hypeLevel=" + hypeLevel.name() + "]";
 	}
 
 }

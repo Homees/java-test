@@ -34,7 +34,7 @@ public class InitRunner implements CommandLineRunner {
         var u2 = new JavaScriptFramework("Angular", "3.4.5", LocalDate.of(2021, 12, 31), HypeLevel.MEDIUM);
         frameworkRepository.save(u2);
 
-        var u3 = new JavaScriptFramework("React", "2.3.3", LocalDate.of(2022, 12, 31), HypeLevel.HIGH);
+        var u3 = new JavaScriptFramework("React JS", "2.3.3", LocalDate.of(2022, 12, 31), HypeLevel.HIGH);
         frameworkRepository.save(u3);
     }
 }
