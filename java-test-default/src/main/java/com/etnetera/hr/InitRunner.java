@@ -26,15 +26,15 @@ public class InitRunner implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
 
-        logger.info("initializing users");
+        logger.info("Initializing frameworks...");
 
-        var u1 = new JavaScriptFramework("React", "1.2.3", LocalDate.of(2020, 12, 31), HypeLevel.LOW);
-        frameworkRepository.save(u1);
+        var item1 = new JavaScriptFramework("React", "1.2.3", LocalDate.of(2020, 12, 31), HypeLevel.LOW);
+        frameworkRepository.save(item1);
 
-        var u2 = new JavaScriptFramework("Angular", "3.4.5", LocalDate.of(2021, 12, 31), HypeLevel.MEDIUM);
-        frameworkRepository.save(u2);
+        var item2 = new JavaScriptFramework("Angular", "3.4.5", LocalDate.of(2021, 12, 31), HypeLevel.MEDIUM);
+        frameworkRepository.save(item2);
 
-        var u3 = new JavaScriptFramework("React JS", "2.3.3", LocalDate.of(2022, 12, 31), HypeLevel.HIGH);
-        frameworkRepository.save(u3);
+        var item3 = new JavaScriptFramework("React JS", "2.3.3", LocalDate.of(2022, 12, 31), HypeLevel.HIGH);
+        frameworkRepository.save(item3);
     }
 }
